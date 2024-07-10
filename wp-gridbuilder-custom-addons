@@ -1,0 +1,57 @@
+<?php
+/*
+Plugin Name: Gridbuilder Custom Addons
+Description: Custom addons for Gridbuilder plugin.
+Version: 1.0
+Author: Your Name
+*/
+
+// Register custom block for Gridbuilder
+add_filter('wp_grid_builder/blocks', 'prod_cta_link_block', 10, 1);
+
+function prod_cta_link_block($blocks)
+{
+    $blocks['prod_cta_link_block'] = [
+        'name' => __('Product CTA Link', 'text-domain'),
+        'render_callback' => 'wpdd_prod_cta_block_render',
+    ];
+
+    return $blocks;
+}
+
+// Render callback function for the custom block
+function wpdd_prod_cta_block_render() {
+
+    // Access the global $post variable
+    global $post;
+
+    // Get current post object using Gridbuilder function
+    $post = wpgb_get_post();
+
+    // Set up global post data
+    setup_postdata($post);
+
+    $product_id = $post->ID;
+    $product_name = get_the_title($post->ID);
+    $link = get_permalink($post->ID);
+
+    // Get the first category associated with the post
+    $terms = get_the_terms($post->ID, 'product-cat');
+    $category_name = !empty($terms) && !is_wp_error($terms) ? $terms[0]->name : 'Uncategorized';
+
+    // Print formatted string in the desired HTML markup
+    printf(
+        '<div class="product-button-block"><a href="%s"><button class="btn-product-cta" onclick="dataLayer.push({
+            \'event\': \'product_cta_link\',
+            \'event_category\': \'Product CTA Event\',
+            \'event_action\': \'Product Detail\',
+            \'event_label\': \'%s - %s\'
+		})">Learn More</button></a></div>',
+        esc_url($link),
+        esc_js($product_name),
+        esc_js($category_name)
+    );
+
+    // Restore the $post global to the current post in the main query
+    wp_reset_postdata();
+}
