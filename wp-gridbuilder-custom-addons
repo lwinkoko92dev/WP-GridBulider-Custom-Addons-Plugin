@@ -1,9 +1,13 @@
 <?php
 /*
-Plugin Name: Gridbuilder Custom Addons
-Description: Custom addons for Gridbuilder plugin.
-Version: 1.0
-Author: Your Name
+ * Plugin Name: Gridbuilder Custom Addons
+ * Plugin URI: https://wordpress.org
+ * Description: Custom addons for Gridbuilder plugin.
+ * Version: 1.0
+ * Author: Lwin Ko Ko
+ * Author URI: https://wordpress.org
+ * License: GPL2+
+ *
 */
 
 // Register custom block for Gridbuilder
